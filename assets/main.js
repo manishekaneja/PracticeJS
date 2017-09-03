@@ -27,9 +27,10 @@
                 if (this.getX() + (this.getRadius()) >= 1448) {
                     this.setX(0);
                 }
-                console.log(this.getY());
+                // console.log(this.getY());
             }
             this.fall = function () {
+               
                 if (this.getY() + this.speed <= 520) {
                     this.speed += GRAVITY;
                     this.setY(this.getY() + this.speed);
@@ -39,6 +40,8 @@
                 }
             }
             this.jump = function () {
+                
+
                 this.speed = -20;
             }
 
@@ -84,10 +87,23 @@
             }
         }
 
-
+        var tou=true;
+        var jumpcount=0;
 
         function keyPressed() {
+            console.log(tou);
+            if(c.getY()>500){
+                tou=true;
+                jumpcount=0;
+                
+            }
+            if(tou){
             c.jump();
+            jumpcount++;
+            }
+            if(jumpcount>=3){
+                tou=false;
+            }
         }
 
         function reduceLoad() {
@@ -97,10 +113,14 @@
                 if (a.getX() + a.getWidth() < 0) {
                     b.shift();
                 }
+                hit = collideRectCircle(a.getX(),a.getY(),a.getWidth(),a.getHeight(),c.getX(),c.getY(),c.getRadius());
+                if(hit){
+                    alert("Game Over");
+                    reset();
+                }
 
             }
 
-            console.log("aaa");
 
         }
 
@@ -131,9 +151,16 @@
             y: 200
 
         }];
+        var score =0;
         var c = new ball(200, y, 20);
         var b = [];
         var d = new building(100, 20);
+        function reset(){
+            b=[];
+        }
+         setInterval(function(){
+            score++;
+         },500);
 
         function draw() {
             clear();
@@ -141,10 +168,13 @@
             c.move();
             d.move();
             reduceLoad();
-            console.log(b);
+            // console.log(b);
             ellipse(c.getX(), c.getY(), c.getRadius(), c.getRadius());
             rect(d.getX(), d.getY(), d.getWidth(), d.getHeight());
             line(0, 540, 1480, 540);
+            text("Score :: "+score,1300,100);
+           
+            
 
 
 
